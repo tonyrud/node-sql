@@ -1,39 +1,39 @@
 const faker = require('faker');
-const connection = require('./dbConnection');
+const connection = require('./dbConnection')('localhost');
+const { promisify } = require('util');
 
-connection.connect(function(err) {
+const totalUsers = +process.argv[2] || 500;
+
+const mysqlQuery = promisify(connection.query).bind(connection);
+
+connection.connect(async function(err) {
     if (err) {
         return console.error('error: ' + err.message);
     }
 
-    let createTodos = `create table if not exists users(
+    const dropTable = `DROP TABLE users`;
+    await mysqlQuery(dropTable);
+
+    console.log('dropped users table');
+
+    const createUsersTable = `create table if not exists users(
         email VARCHAR(255) PRIMARY KEY,
         created_at TIMESTAMP DEFAULT NOW()
     )`;
 
-    connection.query(createTodos, function(err, results, fields) {
-        if (err) {
-            console.log(err.message);
-        }
-        console.log('created users table');
+    await mysqlQuery(createUsersTable);
+
+    console.log('created users table');
+
+    const users = [...Array(totalUsers)].map(i => {
+        return [faker.internet.email(), faker.date.past()];
     });
 
-    // connection.end(function(err) {
-    //     if (err) {
-    //         return console.log(err.message);
-    //     }
-    // });
-    var users = [];
-    for (var i = 0; i < 500; i++) {
-        users.push([faker.internet.email(), faker.date.past()]);
-    }
+    const insertUsers = 'INSERT INTO users (email, created_at) VALUES ?';
 
-    const query = 'INSERT INTO users (email, created_at) VALUES ?';
+    await mysqlQuery(insertUsers, [users]);
 
-    connection.query(query, [users], (error, results, fields) => {
-        if (error) throw error;
+    console.log(`${totalUsers} users added`);
 
-        console.log('result: ', results);
-    });
     connection.end();
 });

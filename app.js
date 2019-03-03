@@ -1,19 +1,18 @@
 const express = require('express');
 const app = express();
-const connection = require('./dbConnection');
+const connection = require('./dbConnection')();
 
 const PORT = process.env.PORT;
 
-// const query =
-//     'SELECT DATE_FORMAT(MIN(created_at), "%M %D %Y") as "earliest date" FROM users';
+const query = 'SELECT COUNT(*) FROM users';
 
-// connection.query(query, (error, results, fields) => {
-//     if (error) throw error;
+connection.query(query, (error, results, fields) => {
+    if (error) throw error;
 
-//     console.log('result: ', results);
-// });
+    console.log('result: ', results);
+});
 
-// connection.end();
+connection.end();
 
 app.get('/', (req, res) => {
     res.send('Hello from our web app!');

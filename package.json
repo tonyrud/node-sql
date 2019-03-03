@@ -4,8 +4,8 @@
     "description": "",
     "main": "app.js",
     "scripts": {
-        "dev": "nodemon app.js",
-        "seed:db": "node seedDb.js"
+        "dev": "nodemon app.js --ignore seedDb.js",
+        "seed": "node seedDb.js"
     },
     "keywords": [],
     "author": "",
