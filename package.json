@@ -4,7 +4,8 @@
     "description": "",
     "main": "app.js",
     "scripts": {
-        "dev": "nodemon app.js"
+        "dev": "nodemon app.js",
+        "seed:db": "node seedDb.js"
     },
     "keywords": [],
     "author": "",
@@ -14,6 +15,7 @@
         "nodemon": "^1.18.10"
     },
     "dependencies": {
+        "express": "^4.16.4",
         "mysql": "^2.16.0"
     }
 }

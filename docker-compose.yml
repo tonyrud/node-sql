@@ -9,6 +9,9 @@ services:
         image: node:11
         volumes:
             - .:/usr/src/service
+        environment:
+            PORT: 3008
+            DB_PORT: 33306
         working_dir: /usr/src/service
         command: npm run dev
         ports:

@@ -1,23 +1,22 @@
-const mysql = require('mysql');
-const faker = require('faker');
+const express = require('express');
+const app = express();
+const connection = require('./dbConnection');
 
-console.log(faker.internet.email());
-const connection = mysql.createConnection({
-    host: 'host.docker.internal',
-    port: '33306',
-    user: 'user',
-    password: 'password',
-    database: 'db',
+const PORT = process.env.PORT;
+
+// const query =
+//     'SELECT DATE_FORMAT(MIN(created_at), "%M %D %Y") as "earliest date" FROM users';
+
+// connection.query(query, (error, results, fields) => {
+//     if (error) throw error;
+
+//     console.log('result: ', results);
+// });
+
+// connection.end();
+
+app.get('/', (req, res) => {
+    res.send('Hello from our web app!');
 });
 
-function generateAddress() {}
-
-const query = 'SELECT CURDATE()';
-
-connection.query(query, (error, results, fields) => {
-    if (error) throw error;
-
-    console.log('result: ', results);
-});
-
-connection.end();
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
